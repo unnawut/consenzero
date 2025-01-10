@@ -5,7 +5,7 @@
 ## Responsibilities
 
 1. **The "host" program 👷** - Retrieves the beacon state and beacon block from wild, feeds them to the guest to prove the state transition and broadcasts the receipt to the attester program.
-2. **The "guest" program 📜** - Contains the actual beacon state transition function (STF) to be compiled into an ELF for 1) the host to prove and 2) the verifier to verify the state transition.
+2. **The "guest" program 📜** - Contains the actual beacon state transition function (STF) to be compiled into an ELF for 1) the host to prove and 2) the attester to verify the state transition.
 3. **The "attester" program 🕵️** - Listens for a broadcasted receipt, verifies that the receipt is valid (follows the expected state transition function defined in the ELF), progresses its internal beacon state, and announces the receipt's validity.
 
 ## Behavior Flow

@@ -15,7 +15,7 @@
 3. The **host 👷** listens for a beacon block broadcast (simulates block building).
 4. The **host 👷** submits the newly broadcasted block to the **guest 📜** to prove (simulates block sealing).
 5. The **guest 📜** returns a receipt to the **host 👷**.
-6. The **host 👷** broadcasts the receipt to the attester 🕵️ (simulates a block proposal)..
+6. The **host 👷** broadcasts the receipt to the **attester 🕵️** (simulates a block proposal)..
 7. The **attester 🕵️** verifies the receipt, progresses its beacon state, and announces the receipt's validity (simulates block attestation).
 
 ## Directory Structure

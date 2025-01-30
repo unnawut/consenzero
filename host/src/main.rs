@@ -5,6 +5,7 @@ use risc0_zkvm::{default_prover, ExecutorEnv};
 use clap::Parser;
 use ream_consensus::deneb::beacon_state::BeaconState;
 use ssz::Decode;
+use beam_types::BeamState;
 
 mod beacon_client;
 use beacon_client::BeaconNodeHttpClient;
@@ -82,93 +83,36 @@ async fn main() {
     // zkVM operations
     // 
 
-    // // Build the zkVM guest environment
-    // let env = ExecutorEnv::builder()
-    //     .write(&pre_state)
-    //     .unwrap()
-    //     .build()
-    //     .unwrap();
+    let zkvm_input = BeamState {
+        slot: pre_state.slot,
+    };
 
-    // // Run the state transition
+    // Build the zkVM guest environment
+    let env = ExecutorEnv::builder()
+        .write(&zkvm_input)
+        .unwrap()
+        .build()
+        .unwrap();
 
-    // // Obtain the default prover.
-    // let prover = default_prover();
+    // Run the state transition
 
-    // // Proof information by proving the specified ELF binary.
-    // // This struct contains the receipt along with statistics about execution of the guest
-    // let prove_info = prover.prove(env, CONSENSUS_STF_ELF).unwrap();
+    // Obtain the default prover.
+    let prover = default_prover();
 
-    // // Extract the receipt.
-    // let receipt = prove_info.receipt;
+    // Proof information by proving the specified ELF binary.
+    // This struct contains the receipt along with statistics about execution of the guest
+    let prove_info = prover.prove(env, CONSENSUS_STF_ELF).unwrap();
 
-    // // TODO: Implement code for retrieving receipt journal here.
-    // // For example:
-    // let output: BeaconState = receipt.journal.decode().unwrap();
+    // Extract the receipt.
+    let receipt = prove_info.receipt;
 
-    // println!("Receipt journal: {}", output.slot);
+    // TODO: Implement code for retrieving receipt journal here.
+    // For example:
+    let output: BeamState = receipt.journal.decode().unwrap();
 
-    // // The receipt was verified at the end of proving, but the below code is an
-    // // example of how someone else could verify this receipt.
-    // receipt.verify(CONSENSUS_STF_ID).unwrap();
+    println!("Receipt journal: {:?}", output);
+
+    // The receipt was verified at the end of proving, but the below code is an
+    // example of how someone else could verify this receipt.
+    receipt.verify(CONSENSUS_STF_ID).unwrap();
 }
-
-// fn mock_state(slot_number: u64) -> BeaconState {
-//     BeaconState {
-//         genesis_time: 0,
-//         genesis_validators_root: alloy_primitives::fixed_bytes!("0000000000000000000000000000000000000000000000000000000000000000"),
-//         slot: slot_number,
-//         // fork: Fork,
-
-//         // // History
-//         // latest_block_header: BeaconBlockHeader,
-//         // block_roots: FixedVector<B256, U8192>,
-//         // state_roots: FixedVector<B256, U8192>,
-//         // /// Frozen in Capella, replaced by historical_summaries
-//         // historical_roots: VariableList<B256, U16777216>,
-
-//         // // Eth1
-//         // eth1_data: Eth1Data,
-//         // eth1_data_votes: VariableList<Eth1Data, U2048>,
-//         eth1_deposit_index: 0,
-
-//         // // Registry
-//         // validators: VariableList<Validator, U1099511627776>,
-//         // #[serde(deserialize_with = "ssz_types::serde_utils::quoted_u64_var_list::deserialize")]
-//         // balances: VariableList<u64, U1099511627776>,
-
-//         // // Randomness
-//         // randao_mixes: FixedVector<B256, U65536>,
-
-//         // // Slashings
-//         // #[serde(deserialize_with = "ssz_types::serde_utils::quoted_u64_fixed_vec::deserialize")]
-//         // slashings: FixedVector<u64, U8192>,
-
-//         // // Participation
-//         // previous_epoch_participation: VariableList<u8, U1099511627776>,
-//         // current_epoch_participation: VariableList<u8, U1099511627776>,
-
-//         // // Finality
-//         // justification_bits: BitVector<U4>,
-//         // previous_justified_checkpoint: Checkpoint,
-//         // current_justified_checkpoint: Checkpoint,
-//         // finalized_checkpoint: Checkpoint,
-
-//         // // Inactivity
-//         // #[serde(deserialize_with = "ssz_types::serde_utils::quoted_u64_var_list::deserialize")]
-//         // inactivity_scores: VariableList<u64, U1099511627776>,
-
-//         // // Sync
-//         // current_sync_committee: Arc<SyncCommittee>,
-//         // next_sync_committee: Arc<SyncCommittee>,
-
-//         // // Execution
-//         // latest_execution_payload_header: ExecutionPayloadHeader,
-
-//         // // Withdrawals
-//         next_withdrawal_index: 0,
-//         next_withdrawal_validator_index: 0,
-
-//         // // Deep history valid from Capella onwards.
-//         // historical_summaries: VariableList<HistoricalSummary, U16777216>,
-//     }
-// }

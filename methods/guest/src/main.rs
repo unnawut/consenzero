@@ -1,5 +1,5 @@
 use risc0_zkvm::guest::env;
-use ream_consensus::deneb::beacon_state::BeaconState;
+use beam_types::BeamState;
 
 mod beacon_chain;
 
@@ -7,11 +7,11 @@ fn main() {
     // TODO: Implement your guest code here
 
     // Read the input
-    let pre_state: BeaconState = env::read();
+    let pre_state: BeamState = env::read();
 
-    // Try transition the state
-    let output: BeaconState = beacon_chain::state_transition::state_transition(&pre_state);
+    // TODO: Transition the state
+    let post_state = pre_state;
 
     // Write public output to the journal
-    env::commit(&output);
+    env::commit(&post_state);
 }

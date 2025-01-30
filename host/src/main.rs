@@ -84,7 +84,31 @@ async fn main() {
     // 
 
     let zkvm_input = BeamState {
+        // Versioning
+        genesis_time: pre_state.genesis_time,
+        genesis_validators_root: pre_state.genesis_validators_root,
         slot: pre_state.slot,
+        fork: pre_state.fork,
+
+        // History
+        latest_block_header: pre_state.latest_block_header,
+        block_roots: pre_state.block_roots,
+        state_roots: pre_state.state_roots,
+        // Frozen in Capella, replaced by historical_summaries
+        historical_roots: pre_state.historical_roots,
+
+        // Eth1
+        eth1_data: pre_state.eth1_data,
+        eth1_data_votes: pre_state.eth1_data_votes,
+        eth1_deposit_index: pre_state.eth1_deposit_index,
+
+        // Registry
+        validators: pre_state.validators,
+        balances: pre_state.balances,
+
+        // Withdrawals
+        next_withdrawal_index: pre_state.next_withdrawal_index,
+        next_withdrawal_validator_index: pre_state.next_withdrawal_validator_index,
     };
 
     // Build the zkVM guest environment

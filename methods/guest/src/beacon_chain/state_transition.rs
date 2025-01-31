@@ -23,13 +23,8 @@
 //     if validate_result:
 //         assert block.state_root == hash_tree_root(state)
 
-use ream_consensus::deneb::beacon_block::SignedBeaconBlock;
 use ream_consensus::deneb::beacon_state::BeaconState;
 
-pub fn _state_transition(state: &BeaconState, _signed_block: &SignedBeaconBlock) -> BeaconState{
-    state.clone()
-}
-
-pub fn test_passing_slot(slot_number: u32) -> u32 {
-    slot_number + 1
+pub fn state_transition(pre_state: &BeaconState) -> BeaconState{
+    pre_state.clone()
 }

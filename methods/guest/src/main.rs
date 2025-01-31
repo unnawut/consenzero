@@ -1,15 +1,29 @@
 use risc0_zkvm::guest::env;
+use ream_consensus::deneb::beacon_state::BeaconState;
+use ream_consensus::deneb::beacon_block::BeaconBlock;
+
 mod beacon_chain;
 
 fn main() {
-    // TODO: Implement your guest code here
+    let count_start = env::cycle_count();
 
-    // read the input
-    let input: u32 = env::read();
+    // Read the pre-state
+    let mut pre_state: BeaconState = env::read();
+    let count_after_read_prestate = env::cycle_count();
 
-    // TODO: do something with the input
-    let output: u32 = beacon_chain::state_transition::test_passing_slot(input);
+    // Read the block
+    let block: BeaconBlock = env::read();
+    let count_after_read_block = env::cycle_count();
 
-    // write public output to the journal
-    env::commit(&output);
+    // Transition the state
+    let post_state = pre_state.process_block_header(block).unwrap();
+    let count_after_process_block_header = env::cycle_count();
+
+    // Benchmark cycle counts
+    eprintln!("read_pre_state: {}", count_after_read_prestate - count_start);
+    eprintln!("read_block: {}", count_after_read_block - count_after_read_prestate);
+    eprintln!("process_block_header: {}", count_after_process_block_header - count_after_read_block);
+
+    // Write public output to the journal
+    env::commit(&post_state);
 }

@@ -9,3 +9,7 @@ opt-level = 3
 [profile.release]
 debug = 1
 lto = true
+
+[workspace.dependencies]
+ream-consensus = { git = "https://github.com/unnawut/ream", package = "ream-consensus", branch = "remove-deserialize" }
+snap = "1.1"
